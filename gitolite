@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# The contents of the log file are given in stdin.
+cat /dev/stdin | awk '#
+# Fields are separated via \t
+BEGIN { FS = "\t" }
+
+# count transactions
+BEGIN { transactions = 0 }
+
+# set variable for storing tid
+BEGIN { last_tid = "" }
+
+# count tids
+{
+	if( $2 != last_tid ) {
+		++transactions;
+		last_tid=$2
+	}
+}
+
+{
+	if( $3 == "ssh" || $3 == "http") {
+		ips[$6]++
+	}
+}
+# Print results
+END {
+	print"transactions: " transactions
+}
+
+#END {
+#	for(ip in ips) {
+#		printf "%-16s %s\n", substr(ip, 6), ips[ip]
+#	}
+#}
+'
+
