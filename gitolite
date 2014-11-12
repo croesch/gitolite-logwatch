@@ -44,7 +44,7 @@ BEGIN {
 # record created repos
 {
   if( $3 == "create" ) {
-    created_repos[alen(created_repos)+1] = $5 " created repo " $4 " (" $6 ")"
+    created_repos[alen(created_repos)+1] = $5 " created " $4 " (" $6 ")"
   }
 }
 
