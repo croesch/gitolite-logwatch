@@ -31,6 +31,13 @@ BEGIN {
   }
 }
 
+# record created repos
+{
+  if( $3 == "create" ) {
+    created_repos[alen(created_repos)+1] = $5 " created repo " $4 " (" $6 ")"
+  }
+}
+
 # count tids
 {
   if( $2 != last_tid ) {
@@ -54,9 +61,7 @@ END {
     }
     printf("\n")
   }
-}
 
-END {
   if( alen(warnings) > 0 ) {
     printf("       warnings\n======================\n")
     for(i=0;i<alen(warnings);++i) {
@@ -64,9 +69,15 @@ END {
     }
     printf("\n")
   }
-}
 
-END {
+  if(alen(created_repos) > 0 ) {
+    printf("    created repos\n======================\n")
+    for(i=0;i<alen(created_repos);++i) {
+      printf(" %s\n", created_repos[i+1])
+    }
+    printf("\n")
+  }
+
   printf("     transactions\n======================\n")
   for(ip in ips) {
     printf(" %-5s%s\n", ips[ip], substr(ip, 6))
