@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 # The contents of the log file are given in stdin.
-cat /dev/stdin | awk '#
+cat /dev/stdin | awk '
+function alen( a, i) {
+    for( i in a);
+    return i
+}
+
 # Fields are separated via \t
 BEGIN { FS = "\t" }
 
@@ -11,28 +16,27 @@ BEGIN { transactions = 0 }
 # set variable for storing tid
 BEGIN { last_tid = "" }
 
+
 # count tids
 {
-	if( $2 != last_tid ) {
-		++transactions;
-		last_tid=$2
-	}
+  if( $2 != last_tid ) {
+    ++transactions;
+    last_tid=$2
+  }
 }
-
+# record transaction ips
 {
-	if( $3 == "ssh" || $3 == "http") {
-		ips[$6]++
-	}
+  if( $3 == "ssh" || $3 == "http") {
+    ips[$6]++
+  }
 }
-# Print results
+
+# print results
 END {
-	print"transactions: " transactions
+  printf("     transactions     \n======================\n")
+  for(ip in ips) {
+    printf(" %-5s%s\n", ips[ip], substr(ip, 6))
+  }
+  printf("----------------------\n %-5d%s\n", transactions, "total")
 }
-
-#END {
-#	for(ip in ips) {
-#		printf "%-16s %s\n", substr(ip, 6), ips[ip]
-#	}
-#}
 '
-
