@@ -10,6 +10,16 @@ function alen(a,  i,j) {
   return j
 }
 
+function print_array(arr, title,   i) {
+  if( alen(arr) > 0 ) {
+    printf("%s\n======================\n", title)
+    for(i=0;i<alen(arr);++i) {
+      printf(" %s\n", arr[i+1])
+    }
+    printf("\n")
+  }
+}
+
 BEGIN {
   # Fields are separated via \t
   FS = "\t"
@@ -54,29 +64,9 @@ BEGIN {
 
 # print results
 END {
-  if( alen(errors) > 0 ) {
-    printf(" !      ERRORS      ! \n======================\n")
-    for(i=0;i<alen(errors);++i) {
-      printf(" %s\n", errors[i+1])
-    }
-    printf("\n")
-  }
-
-  if( alen(warnings) > 0 ) {
-    printf("       warnings\n======================\n")
-    for(i=0;i<alen(warnings);++i) {
-      printf(" %s\n", warnings[i+1])
-    }
-    printf("\n")
-  }
-
-  if(alen(created_repos) > 0 ) {
-    printf("    created repos\n======================\n")
-    for(i=0;i<alen(created_repos);++i) {
-      printf(" %s\n", created_repos[i+1])
-    }
-    printf("\n")
-  }
+  print_array(errors, " !      ERRORS      ! ")
+  print_array(warnings, "       warnings")
+  print_array(created_repos, "    created repos")
 
   printf("     transactions\n======================\n")
   for(ip in ips) {
